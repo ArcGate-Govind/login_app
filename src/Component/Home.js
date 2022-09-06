@@ -1,15 +1,25 @@
 import React from 'react'
+import { useCookies } from 'react-cookie'
+import { useNavigate } from 'react-router-dom'
 import '../Component/Home.css'
 
 const Home = () => {
-  let userData = JSON.parse(sessionStorage.getItem('userData'))
+  const navigate = useNavigate()
+  const [cookies, setCookie, removeCookie] = useCookies();
+  let userDataGet = JSON.parse(sessionStorage.getItem('userData'))
+
+
+  const logoutUser = () =>{
+    removeCookie('Username')
+    navigate("/")
+  }
 
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
-            Navbar
+            USERS
           </a>
           <button
             className="navbar-toggler"
@@ -24,16 +34,9 @@ const Home = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div className="navbar-nav">
-              <a className="nav-link active" aria-current="page" href="#">
-                Home
-              </a>
-              <a className="nav-link" href="#">
-                Features
-              </a>
-              <a className="nav-link" href="#">
-                Pricing
-              </a>
-              <a className="nav-link disabled">Disabled</a>
+              <a className="nav-link active" style={{cursor:'pointer'}} onClick={logoutUser} aria-current="page">
+              Logout
+            </a>
             </div>
           </div>
         </div>
@@ -42,8 +45,7 @@ const Home = () => {
         <h1 className='text-center m-5 text-info'>All Register User</h1>
       </div>
       <div>
-
-        <table class="table table-hover">
+        <table className="table table-hover">
           <thead>
             <tr>
               <th>Users</th>
@@ -51,15 +53,14 @@ const Home = () => {
           </thead>
           <tbody>
             {
-              userData.map((data) => {
+              userDataGet ? 
+              userDataGet.map((data) => {
                 return (
                   <tr>
-
                     <td key={data.email}>{data.name}</td>
                   </tr>
-
                 )
-              })
+              }) : 'Loading'
             }
 
           </tbody>

@@ -1,23 +1,29 @@
-import React ,{useState} from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Routes,Route } from "react-router-dom";
-import { CookiesProvider } from "react-cookie";
+import { CookiesProvider, useCookies } from "react-cookie";
 import Home from './Component/Home'
 import Login from './Component/Login'
 import Register from './Component/Register'
-
-
+import ProtectedRoute from './ProtectedRoute';
 
 
 const App = () => {
-  
-  
+  const [cookies] = useCookies();
+  let userData = cookies.Username;
+
+
   return (
     <CookiesProvider>
     <Router>
     <Routes>
-    <Route exact path="/" element={<Register/>} />
+      <Route exact path="/" element={<Register/>} />
       <Route exact path="/login" element={<Login/>} />
-      <Route exact path="/home" element={<Home/>} />
+      <Route exact path="/home" element={
+        <ProtectedRoute>
+        <Home/>
+      </ProtectedRoute>  
+      }
+         />
       </Routes>
     </Router>
     </CookiesProvider>
